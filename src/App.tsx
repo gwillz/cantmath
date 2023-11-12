@@ -27,21 +27,30 @@ export function *App(this: Context) {
 
     const onCreate = (player: Player) => {
         players.push(player);
-        this.refresh();
 
         updatePlayers(players);
+        this.refresh();
     }
 
     const onEdit = (id: string, update: Partial<Omit<Player, 'id'>>) => {
         const player = players.find(player => player.id === id)!;
         Object.assign(player, update)
 
+        this.refresh();
+
         updatePlayers(players);
     }
 
     const onRemove = (id: string) => {
         const index = players.findIndex(player => player.id === id);
-        players.splice(index, 1);
+
+        if (index !== -1) {
+            players.splice(index, 1);
+        }
+
+        editing = null;
+
+        this.refresh();
 
         updatePlayers(players);
     }
@@ -59,8 +68,10 @@ export function *App(this: Context) {
     for (let {} of this) {
         yield (
             <div class="container">
-                <h1>Can't Math</h1>
-                <p>Round: {round}</p>
+                <div class="header">
+                    <h1>Can't Math</h1>
+                    <p class="status">Round: {round}</p>
+                </div>
 
                 {players.map(player => (
                     <Player
@@ -74,9 +85,10 @@ export function *App(this: Context) {
 
                 {editing ? (
                     <EditPlayer
+                        crank-key={editing}
                         player={players.find(player => player.id === editing)!}
                         onEdit={onEdit}
-                        onRemove={onRemove}
+                        onDelete={onRemove}
                         onClose={onCloseEdit}
                     />
                 ) : (

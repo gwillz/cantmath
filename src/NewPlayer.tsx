@@ -13,12 +13,17 @@ export function *NewPlayer(this: Context, props: Props) {
     const onSubmit = (event: Event) => {
         event.preventDefault();
 
+        if (name.trim() == '') {
+            return;
+        }
+
         props.onSubmit({
             id: Math.random().toString(36).slice(2, 8),
             name: name,
             rounds: [],
         });
 
+        name = '';
         this.refresh();
     }
 
