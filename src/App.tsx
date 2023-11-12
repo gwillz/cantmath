@@ -21,9 +21,27 @@ export function *App(this: Context) {
 
     const players: Player[] = getPlayers();
 
-    const round = players.reduce((round, player) => Math.max(round, player.rounds.length), 0);
-
     let editing: string | null = null;
+
+    const getRound = () => {
+        return players.reduce((round, player) => Math.max(round, player.rounds.length), 0);
+    }
+
+    const getNextPlayer = () => {
+        if (players.length == 0) {
+            return null;
+        }
+
+        const round = getRound();
+
+        for (let player of players) {
+            if (player.rounds.length < round) {
+                return player;
+            }
+        }
+
+        return players[0];
+    }
 
     const onCreate = (player: Player) => {
         players.push(player);
@@ -41,7 +59,7 @@ export function *App(this: Context) {
         updatePlayers(players);
     }
 
-    const onRemove = (id: string) => {
+    const onDelete = (id: string) => {
         const index = players.findIndex(player => player.id === id);
 
         if (index !== -1) {
@@ -55,14 +73,18 @@ export function *App(this: Context) {
         updatePlayers(players);
     }
 
-    const onOpenEdit = (id: string) => {
-        editing = id;
-        this.refresh();
-    }
-
     const onCloseEdit = () => {
         editing = null;
         this.refresh();
+    }
+
+    const onNext = () => {
+        const player = getNextPlayer();
+
+        if (player) {
+            editing = player.id;
+            this.refresh();
+        }
     }
 
     for (let {} of this) {
@@ -70,14 +92,14 @@ export function *App(this: Context) {
             <div class="container">
                 <div class="header">
                     <h1>Can't Math</h1>
-                    <p class="status">Round: {round}</p>
+                    <button type="button" class="status" onclick={onNext}>Round: {getRound()}</button>
                 </div>
 
                 {players.map(player => (
                     <Player
                         crank-key={player.id}
                         player={player}
-                        onEdit={onOpenEdit}
+                        onDelete={onDelete}
                     />
                 ))}
 
@@ -88,7 +110,6 @@ export function *App(this: Context) {
                         crank-key={editing}
                         player={players.find(player => player.id === editing)!}
                         onEdit={onEdit}
-                        onDelete={onRemove}
                         onClose={onCloseEdit}
                     />
                 ) : (

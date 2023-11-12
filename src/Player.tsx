@@ -9,7 +9,7 @@ export interface Player {
 
 type Props = {
     player: Player;
-    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
 }
 
 export function *Player(this: Context, props: Props) {
@@ -17,16 +17,24 @@ export function *Player(this: Context, props: Props) {
     const total = props.player.rounds.reduce((total, score) => total + score, 0);
     const round = props.player.rounds.length;
 
-    const onEdit = () => {
-        props.onEdit(props.player.id);
+    let timer = 0;
+
+    const onCancel = () => {
+        clearTimeout(timer);
+    }
+
+    const onPress = () => {
+        timer = setTimeout(() => {
+            if (confirm(`Delete player? - ${props.player.name}`)) {
+                props.onDelete(props.player.id);
+            }
+        }, 500);
     }
 
     return (
-        <div class="player">
+        <div tabindex="0" class="player" onmousedown={onPress} onmouseup={onCancel}>
             <h2>{props.player.name}</h2>
-            <span class="player__total">{total}</span>
-            <span class="player__round">{!!round && round}</span>
-            <button type="button" onclick={onEdit}>Edit</button>
+            <span class="player__total">{total} <span class="player__round">{round}</span></span>
         </div>
     )
 }

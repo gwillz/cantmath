@@ -5,7 +5,6 @@ import { Player } from "./Player";
 type Props = {
     player: Player;
     onEdit: (id: string, player: Partial<Omit<Player, 'id'>>) => void;
-    onDelete: (id: string) => void;
     onClose: () => void;
 }
 
@@ -23,12 +22,6 @@ export function *EditPlayer(this: Context, props: Props) {
         });
 
         props.onClose();
-    }
-
-    const onDelete = () => {
-        if (confirm('Are you sure?')) {
-            props.onDelete(props.player.id);
-        }
     }
 
     const onUndo = () => {
@@ -64,7 +57,6 @@ export function *EditPlayer(this: Context, props: Props) {
                 <input type="number" name="score" value={value} oninput={onInput} />
                 <button class="player__edit__add">Add</button>
                 <button class="player__edit__remove" type="button" onclick={onUndo}>Undo</button>
-                <button class="player__edit__delete" type="button" onclick={onDelete}>Delete</button>
             </form>
         )
     }

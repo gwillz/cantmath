@@ -55,7 +55,7 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 }
 
 .header h1 {
@@ -69,11 +69,16 @@ input {
 
 .player {
     display: grid;
-    grid-template-columns: 4fr 35px 35px min-content;
-    gap: 20px;
-    margin-bottom: 10px;
+    grid-template-columns: 4fr 1fr;
+    padding: 10px 20px;
+    margin: 0 -20px;
+    /* margin-top: -10px; */
     align-items: center;
     justify-items: right;
+}
+
+.player:active {
+    background: #eee;
 }
 
 .player h2 {
@@ -82,10 +87,12 @@ input {
 }
 
 .player__total {
+    font-weight: bold;
     text-align: right;
 }
 
 .player__round {
+    font-weight: normal;
     text-align: right;
     color: #999;
 }
