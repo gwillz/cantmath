@@ -10,10 +10,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/color": "^3.0.6",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
   },
   "dependencies": {
-    "@b9g/crank": "^0.5.6"
+    "@b9g/crank": "^0.5.6",
+    "color": "^4.2.3"
   }
 }
