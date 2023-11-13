@@ -34,7 +34,7 @@ export function ViewScores(this: Context, props: Props) {
                     <p>No scores.</p>
                     )}
             </div>
-
+            <hr/>
             <div class="toolbar">
                 <button class="player__edit__remove" type="button" onclick={onUndo}>Undo</button>
                 <button class="player__edit__cancel" type="button" onclick={props.onClose}>Back</button>
