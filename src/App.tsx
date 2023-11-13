@@ -1,7 +1,11 @@
 import { Context, createElement } from "@b9g/crank";
 import { Player } from "./Player";
-import { NewPlayer } from "./NewPlayer";
-import { EditPlayer } from "./EditPlayer";
+import { Game } from "./Game";
+import { SettingsForm } from "./SettingsForm";
+import { ViewScores } from "./ViewScores";
+
+
+type AppView = 'game' | 'settings' | 'scores';
 
 
 function getPlayers(): Player[] {
@@ -21,31 +25,11 @@ export function *App(this: Context) {
 
     const players: Player[] = getPlayers();
 
-    let editing: string | null = null;
+    let view: AppView = 'game';
+    let playerId = '';
 
-    const getRound = () => {
-        return players.reduce((round, player) => Math.max(round, player.rounds.length), 0);
-    }
-
-    const getNextPlayer = () => {
-        if (players.length == 0) {
-            return null;
-        }
-
-        const round = getRound();
-
-        for (let player of players) {
-            if (player.rounds.length < round) {
-                return player;
-            }
-        }
-
-        return players[0];
-    }
-
-    const onCreate = (player: Player) => {
-        players.push(player);
-
+    const onEdit = (newPlayers: Player[]) => {
+        players.splice(0, players.length, ...newPlayers);
         updatePlayers(players);
         this.refresh();
     }
@@ -59,71 +43,50 @@ export function *App(this: Context) {
         updatePlayers(players);
     }
 
-    const onDelete = (id: string) => {
-        const index = players.findIndex(player => player.id === id);
-
-        if (index !== -1) {
-            players.splice(index, 1);
-        }
-
-        editing = null;
-
-        this.refresh();
-
-        updatePlayers(players);
-    }
-
-    const onOpenEdit = (id: string) => {
-        editing = id;
+    const onSettings = () => {
+        view = 'settings';
         this.refresh();
     }
 
-    const onCloseEdit = () => {
-        editing = null;
+    const onScores = (id: string) => {
+        playerId = id;
+        view = 'scores';
         this.refresh();
     }
 
-    const onNext = () => {
-        const player = getNextPlayer();
-
-        if (player) {
-            editing = player.id;
-            this.refresh();
-        }
+    const onClose = () => {
+        view = 'game';
+        this.refresh();
     }
 
     for (let {} of this) {
-        const next = getNextPlayer();
+
+        if (players.length == 0) {
+            view = 'settings';
+        }
+
+        const player = players.find(player => player.id === playerId);
 
         yield (
             <div class="container">
-                <div class="header">
-                    <h1>Can't Math</h1>
-                    <button type="button" class="status" onclick={onNext}>Round: {getRound()}</button>
-                </div>
-
-                {players.map(player => (
-                    <Player
-                        crank-key={player.id}
-                        player={player}
-                        isNext={player.id === next?.id}
+                {view === 'game' ? (
+                    <Game
+                        players={players}
                         onUpdate={onUpdate}
-                        onEdit={onOpenEdit}
+                        onSettings={onSettings}
+                        onScores={onScores}
                     />
-                ))}
-
-                <hr/>
-
-                {editing ? (
-                    <EditPlayer
-                        crank-key={editing}
-                        player={players.find(player => player.id === editing)!}
-                        onUpdate={onUpdate}
-                        onClose={onCloseEdit}
+                ) : view === 'settings' ? (
+                    <SettingsForm
+                        players={players}
+                        onUpdate={onEdit}
+                        onClose={onClose}
                     />
                 ) : (
-                    <NewPlayer
-                        onSubmit={onCreate}
+                    <ViewScores
+                        player={player!}
+                        onUpdate={onUpdate}
+                        onClose={onClose}
                     />
                 )}
             </div>

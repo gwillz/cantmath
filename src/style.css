@@ -66,16 +66,33 @@ input {
     margin: 0;
 }
 
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
 
 .player {
     display: flex;
     padding: 10px 20px;
     margin: 0 -20px;
+    gap: 10px;
     align-items: center;
 }
 
 .player:active {
     background: #eee;
+}
+
+.player__edit {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    align-items: center;
+}
+
+.player__edit input {
+    flex: 1 1 auto;
 }
 
 .player__name {
@@ -108,16 +125,14 @@ input {
     font-weight: bold;
 }
 
-.player__new__form {
-    display: grid;
-    grid-template-columns: 1fr min-content;
-    gap: 20px;
+.player__edit__form {
+    display: flex;
+    margin: 20px 0 0;
+    gap: 10px;
 }
 
-.player__edit__form {
-    display: grid;
-    grid-template-columns: 1fr min-content;
-    gap: 20px;
+.player__edit__form input {
+    flex: 1 1 auto;
 }
 
 .player__edit__form h2 {
@@ -158,6 +173,5 @@ input {
     border-top: 1px dashed #aaa;
     display: block;
     flex: 1 1 auto;
-    margin: 0 10px;
     height: 1px;
 }
