@@ -19,14 +19,10 @@ export function SettingsForm(this: Context, props: Props) {
         props.onUpdate([...props.players, player]);
     }
 
-    const onEditPlayer = (player: Player) => {
-        const index = props.players.findIndex(p => p.id === player.id);
-
-        if (index !== -1) {
-            const players = [...props.players];
-            players.splice(index, 1, player);
-            props.onUpdate(players);
-        }
+    const onUpdatePlayer = (id: string, update: Partial<Omit<Player, 'id'>>) => {
+        const player = props.players.find(p => p.id === id)!;
+        Object.assign(player, update);
+        props.onUpdate(props.players);
     }
 
     const onDeletePlayer = (id: string) => {
@@ -41,6 +37,11 @@ export function SettingsForm(this: Context, props: Props) {
         }
     }
 
+    const onSave = () => {
+        // Kind of a lie, but effectively the same.
+        props.onClose();
+    }
+
     return (
         <div>
             <Header />
@@ -49,21 +50,25 @@ export function SettingsForm(this: Context, props: Props) {
                 <PlayerForm
                     crank-key={player.id}
                     player={player}
-                    onSubmit={onEditPlayer}
+                    onUpdate={onUpdatePlayer}
                     onDelete={onDeletePlayer}
                 />
             ))}
 
             <PlayerForm
                 crank-key='new'
-                onSubmit={onAddPlayer}
+                onCreate={onAddPlayer}
             />
 
             <hr/>
 
             <div class="toolbar">
-                <button type="button" onclick={onReset}>Reset Game</button>
-                <button type="button" onclick={props.onClose}>Back</button>
+                {props.players.length > 0 && (
+                    <button type="button" onclick={onReset}>Reset Game</button>
+                )}
+                {props.players.length > 0 && (
+                    <button type="button" onclick={onSave}>Save</button>
+                )}
             </div>
         </div>
     )

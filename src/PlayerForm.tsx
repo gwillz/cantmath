@@ -3,7 +3,8 @@ import { Player } from "./Player";
 import Color from 'color';
 
 type Props = {
-    onSubmit: (player: Player) => void;
+    onUpdate?: (id: string, player: Partial<Omit<Player, 'id'>>) => void;
+    onCreate?: (player: Player) => void;
     onDelete?: (id: string) => void;
     player?: Player;
 }
@@ -29,24 +30,22 @@ export function *PlayerForm(this: Context<Props>, props: Props) {
     const onSubmit = (event: Event) => {
         event.preventDefault();
 
+        if (props.player) {
+            return;
+        }
+
         if (name.trim() == '') {
             return;
         }
 
-        if (props.player) {
-            const player = {...props.player, name, color };
-            props.onSubmit(player);
-        }
-        else {
-            props.onSubmit({
-                id: Math.random().toString(36).slice(2, 8),
-                name: name,
-                color: color,
-                rounds: [],
-            });
+        props.onCreate?.({
+            id: Math.random().toString(36).slice(2, 8),
+            name: name,
+            color: color,
+            rounds: [],
+        });
 
-            name = '';
-        }
+        name = '';
 
         this.refresh();
     }
@@ -60,11 +59,19 @@ export function *PlayerForm(this: Context<Props>, props: Props) {
     const onInput = (event: KeyboardEvent) => {
         const input = event.target as HTMLInputElement;
         name = input.value;
+
+        if (props.player) {
+            props.onUpdate?.(props.player.id, { name });
+        }
     }
 
     const onColor = (event: KeyboardEvent) => {
         const input = event.target as HTMLInputElement;
         color = input.value;
+
+        if (props.player) {
+            props.onUpdate?.(props.player.id, { color });
+        }
     }
 
     for (let props of this) {
@@ -83,9 +90,10 @@ export function *PlayerForm(this: Context<Props>, props: Props) {
                     oninput={onInput}
                     value={name}
                 />
-                <button type="submit">{props.player ? 'Save' : 'Add Player'}</button>
-                {props.player && (
+                {props.player ? (
                     <button type="button" onclick={onDelete}>Delete</button>
+                ) : (
+                    <button type="submit">Add Player</button>
                 )}
             </form>
         )
