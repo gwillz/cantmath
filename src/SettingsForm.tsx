@@ -4,7 +4,6 @@ import { PlayerForm } from "./PlayerForm";
 import { Header } from "./Header";
 
 export interface Settings {
-    color?: string;
     players: Player[];
 }
 

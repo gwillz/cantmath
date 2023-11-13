@@ -20,7 +20,7 @@ export function ViewScores(this: Context, props: Props) {
 
     return (
         <div>
-            <h2>Editing: {props.player.name}</h2>
+            <h2 style={{color: props.player.color}}>Scores - {props.player.name}</h2>
 
             <div class="player__scores">
                 {props.player.rounds.length > 0 ? (

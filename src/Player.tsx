@@ -4,6 +4,7 @@ import { Context, Fragment, createElement } from "@b9g/crank";
 export interface Player {
     id: string;
     name: string;
+    color: string;
     rounds: number[];
 }
 
@@ -48,7 +49,14 @@ export function *Player(this: Context<Props>, props: Props) {
         }
 
         yield (
-            <form tabindex="0" class="player" onmousedown={onPress} onmouseup={onCancel} onsubmit={onSubmit}>
+            <form
+                tabindex="0"
+                class="player"
+                onmousedown={onPress}
+                onmouseup={onCancel}
+                onsubmit={onSubmit}
+                style={{color: props.player.color}}
+            >
                 <h2 class="player__name">{props.player.name}</h2>
                 <div class="spacer"/>
                 {props.isNext && (

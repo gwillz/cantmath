@@ -43,11 +43,14 @@ hr {
 
 button {
     white-space: nowrap;
-    font-size: inherit;
+    font: inherit;
 }
 
 input {
-    font-size: inherit;
+    font: inherit;
+    color: inherit;
+    border: 1px solid #aaa;
+    border-radius: 3px;
     min-width: 100px;
 }
 
@@ -82,6 +85,14 @@ input {
 
 .player:active {
     background: #eee;
+}
+
+.player input {
+    border: 1px solid currentColor;
+}
+
+.player .spacer {
+    border-color: currentColor;
 }
 
 .player__edit {
@@ -131,8 +142,13 @@ input {
     gap: 10px;
 }
 
-.player__edit__form input {
+.player__edit__input {
     flex: 1 1 auto;
+}
+
+.player__edit__color {
+    min-width: unset;
+    width: 40px;
 }
 
 .player__edit__form h2 {
@@ -170,7 +186,7 @@ input {
 }
 
 .spacer {
-    border-top: 1px dashed #aaa;
+    border-top: 1px dashed currentColor;
     display: block;
     flex: 1 1 auto;
     height: 1px;
