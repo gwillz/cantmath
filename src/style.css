@@ -116,7 +116,7 @@ input {
 
 .player__edit__form {
     display: grid;
-    grid-template-columns: 1fr min-content min-content;
+    grid-template-columns: 1fr min-content;
     gap: 20px;
 }
 
@@ -125,12 +125,16 @@ input {
 }
 
 .player__edit__cancel {
-    grid-column: 3;
+    grid-column: 2;
     align-self: start;
 }
 
+.player__edit__remove {
+    align-self: start;
+    justify-self: end;
+}
+
 .player__edit__delete {
-    grid-column: 3;
     align-self: start;
 }
 

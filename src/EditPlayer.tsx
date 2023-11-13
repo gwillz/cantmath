@@ -4,7 +4,8 @@ import { Player } from "./Player";
 
 type Props = {
     player: Player;
-    onEdit: (id: string, player: Partial<Omit<Player, 'id'>>) => void;
+    onUpdate: (id: string, player: Partial<Omit<Player, 'id'>>) => void;
+    onDelete: (id: string) => void;
     onClose: () => void;
 }
 
@@ -17,15 +18,19 @@ export function *EditPlayer(this: Context, props: Props) {
     const onSubmit = (event: Event) => {
         event.preventDefault();
 
-        props.onEdit(props.player.id, {
+        props.onUpdate(props.player.id, {
             rounds: [...props.player.rounds, value],
         });
 
         props.onClose();
     }
 
+    const onDelete = () => {
+        props.onDelete(props.player.id);
+    }
+
     const onUndo = () => {
-        props.onEdit(props.player.id, {
+        props.onUpdate(props.player.id, {
             rounds: props.player.rounds.slice(0, -1),
         })
     }
@@ -54,9 +59,8 @@ export function *EditPlayer(this: Context, props: Props) {
                     )}
                 </div>
 
-                <input type="number" name="score" value={value} oninput={onInput} />
-                <button class="player__edit__add">Add</button>
                 <button class="player__edit__remove" type="button" onclick={onUndo}>Undo</button>
+                <button class="player__edit__delete" type="button" onclick={onDelete}>Delete</button>
             </form>
         )
     }

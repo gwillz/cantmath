@@ -50,7 +50,7 @@ export function *App(this: Context) {
         this.refresh();
     }
 
-    const onEdit = (id: string, update: Partial<Omit<Player, 'id'>>) => {
+    const onUpdate = (id: string, update: Partial<Omit<Player, 'id'>>) => {
         const player = players.find(player => player.id === id)!;
         Object.assign(player, update)
 
@@ -73,6 +73,11 @@ export function *App(this: Context) {
         updatePlayers(players);
     }
 
+    const onOpenEdit = (id: string) => {
+        editing = id;
+        this.refresh();
+    }
+
     const onCloseEdit = () => {
         editing = null;
         this.refresh();
@@ -88,6 +93,8 @@ export function *App(this: Context) {
     }
 
     for (let {} of this) {
+        const next = getNextPlayer();
+
         yield (
             <div class="container">
                 <div class="header">
@@ -99,7 +106,9 @@ export function *App(this: Context) {
                     <Player
                         crank-key={player.id}
                         player={player}
-                        onDelete={onDelete}
+                        isNext={player.id === next?.id}
+                        onUpdate={onUpdate}
+                        onEdit={onOpenEdit}
                     />
                 ))}
 
@@ -109,7 +118,7 @@ export function *App(this: Context) {
                     <EditPlayer
                         crank-key={editing}
                         player={players.find(player => player.id === editing)!}
-                        onEdit={onEdit}
+                        onUpdate={onUpdate}
                         onClose={onCloseEdit}
                     />
                 ) : (
