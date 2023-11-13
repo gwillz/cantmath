@@ -33,8 +33,9 @@ export function *Player(this: Context, props: Props) {
 
     return (
         <div tabindex="0" class="player" onmousedown={onPress} onmouseup={onCancel}>
-            <h2>{props.player.name}</h2>
-            <span class="player__total">{total} <span class="player__round">{round}</span></span>
+            <h2 class="player__name">{props.player.name}</h2>
+            <div class="spacer"/>
+            <h2 class="player__total">{total}</h2>
         </div>
     )
 }

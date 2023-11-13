@@ -68,27 +68,26 @@ input {
 
 
 .player {
-    display: grid;
-    grid-template-columns: 4fr 1fr;
+    display: flex;
     padding: 10px 20px;
     margin: 0 -20px;
-    /* margin-top: -10px; */
     align-items: center;
-    justify-items: right;
 }
 
 .player:active {
     background: #eee;
 }
 
-.player h2 {
+.player__name {
     margin: 0;
+    text-align: left;
     justify-self: left;
 }
 
 .player__total {
-    font-weight: bold;
+    margin: 0;
     text-align: right;
+    justify-self: right;
 }
 
 .player__round {
@@ -151,7 +150,7 @@ input {
     align-items: center;
 }
 
-.player__scores .spacer {
+.spacer {
     border-top: 1px dashed #aaa;
     display: block;
     flex: 1 1 auto;
