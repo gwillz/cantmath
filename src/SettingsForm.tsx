@@ -15,6 +15,10 @@ type Props = {
 
 export function SettingsForm(this: Context, props: Props) {
 
+    const getRound = () => {
+        return props.players.reduce((round, player) => Math.max(round, player.rounds.length), 0);
+    }
+
     const onAddPlayer = (player: Player) => {
         props.onUpdate([...props.players, player]);
     }
@@ -42,6 +46,8 @@ export function SettingsForm(this: Context, props: Props) {
         props.onClose();
     }
 
+    const round = getRound();
+
     return (
         <div>
             <Header />
@@ -63,11 +69,11 @@ export function SettingsForm(this: Context, props: Props) {
             <hr/>
 
             <div class="toolbar">
-                {props.players.length > 0 && (
+                {round > 0 && (
                     <button type="button" onclick={onReset}>Reset Game</button>
                 )}
                 {props.players.length > 0 && (
-                    <button type="button" onclick={onSave}>Save</button>
+                    <button type="button" onclick={onSave}>{round ? 'Save' : 'Start'}</button>
                 )}
             </div>
         </div>
