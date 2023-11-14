@@ -21,14 +21,9 @@ export function *Player(this: Context<Props>, props: Props) {
 
     let value = 1;
 
-    const onCancel = () => {
-        clearTimeout(timer);
-    }
-
-    const onPress = () => {
-        timer = setTimeout(() => {
-            props.onPress(props.player.id);
-        }, 500);
+    const onPress = (event: MouseEvent) => {
+        event.preventDefault();
+        props.onPress(props.player.id);
     }
 
     const onInput = (event: KeyboardEvent) => {
@@ -52,8 +47,7 @@ export function *Player(this: Context<Props>, props: Props) {
             <form
                 tabindex="0"
                 class="player"
-                onmousedown={onPress}
-                onmouseup={onCancel}
+                oncontextmenu={onPress}
                 onsubmit={onSubmit}
                 style={{color: props.player.color}}
             >
