@@ -56,7 +56,7 @@ export function SettingsForm(this: Context, props: Props) {
             ))}
 
             <PlayerForm
-                crank-key='new'
+                crank-key={'new' + props.players.length}
                 onCreate={onAddPlayer}
             />
 
