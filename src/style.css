@@ -98,12 +98,47 @@ input[type=color] {
     align-items: center;
 }
 
-.player:active {
+.player:active:not(:focus-within) {
     background: #eee;
 }
 
-.player input {
+.player__field {
+    position: relative;
     border: 1px solid currentColor;
+    border-radius: 3px;
+    width: 135px;
+}
+
+.player__field input {
+    appearance: textfield;
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.player__button {
+    position: absolute;
+    border: none;
+    background: none;
+    height: 100%;
+    aspect-ratio: 1;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.player__button--sub {
+    left: 0;
+}
+
+.player__button--add {
+    right: 0;
 }
 
 .player .spacer {
